@@ -8,16 +8,19 @@ import com.masternoy.gsm.server.ChannelFactory;
 import com.masternoy.gsm.server.GSMConnectionManager;
 
 import io.netty.bootstrap.Bootstrap;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.oio.OioEventLoopGroup;
 import io.netty.channel.rxtx.RxtxChannel;
 import io.netty.channel.rxtx.RxtxDeviceAddress;
+import io.netty.handler.codec.DelimiterBasedFrameDecoder;
+import io.netty.handler.codec.Delimiters;
 
 public class A7GSMCommunicator {
 	private static final Logger log = Logger.getLogger(A7GSMCommunicator.class);
-	private final static String PORT = "/dev/ttyAM0";
+	private final static String PORT = "/dev/ttyS80";
 
 	@Inject
 	GSMConnectionManager connectionManager;
@@ -37,7 +40,10 @@ public class A7GSMCommunicator {
 						public void initChannel(RxtxChannel ch) throws Exception {
 							connectionManager.setGsmCtx(ch);
 							ch.pipeline().addLast(//
-							// factory.getResponseHandler(),
+									new DelimiterBasedFrameDecoder(258,
+											Unpooled.wrappedBuffer(new byte[] { '\r', '\n' })),
+									// new A7GSMMessageReader(),
+									factory.getATResponseHandler()
 							// factory.getPacketHandler()
 							);
 						}
@@ -49,7 +55,6 @@ public class A7GSMCommunicator {
 		} finally {
 			group.shutdownGracefully();
 		}
-
 	}
 
 }

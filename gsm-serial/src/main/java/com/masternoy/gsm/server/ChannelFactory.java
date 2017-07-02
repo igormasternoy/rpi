@@ -5,7 +5,7 @@ import io.netty.channel.rxtx.RxtxChannelConfig.Databits;
 import io.netty.channel.rxtx.RxtxChannelConfig.Paritybit;
 import io.netty.channel.rxtx.RxtxChannelConfig.Stopbits;
 
-public class ChannelFactory  implements io.netty.channel.ChannelFactory<RxtxChannel>{
+public class ChannelFactory implements io.netty.channel.ChannelFactory<RxtxChannel> {
 
 	public RxtxChannel newChannel() {
 		return createChannel();
