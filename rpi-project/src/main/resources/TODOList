@@ -1,0 +1,16 @@
+- Change mac address to long
+byte[] b = new byte[]{0x00,0x00,0x00,0x00,0x00,0x00,(byte) 0xFF,(byte) 0xFF};
+ByteBuf buf = Unpooled.wrappedBuffer(b);
+long l = buf.readLong();
+ByteBuf out = Unpooled.buffer(8);
+out.writeLong(l);
+
+System.out.print("Byte array: ");
+for (byte c : out.array()) {
+	System.out.print(String.format("%02x", c).toUpperCase());
+}
+System.out.println(" Long value: "+l);
+
+- Parse the response from the device base on FrameId
+
+- Add disruptor to process packets
